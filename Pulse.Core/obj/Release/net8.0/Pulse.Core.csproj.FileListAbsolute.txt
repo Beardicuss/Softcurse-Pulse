@@ -9,3 +9,5 @@ D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.dll
 D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\refint\Pulse.Core.dll
 D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.pdb
 D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\ref\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.csproj.AssemblyReference.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.sourcelink.json

@@ -22,3 +22,10 @@ D:\Dev\Projects\Experiments\Pulse\Pulse.App\obj\Release\net8.0-windows\win-x64\r
 D:\Dev\Projects\Experiments\Pulse\Pulse.App\obj\Release\net8.0-windows\win-x64\Pulse.App.pdb
 D:\Dev\Projects\Experiments\Pulse\Pulse.App\obj\Release\net8.0-windows\win-x64\Pulse.App.genruntimeconfig.cache
 D:\Dev\Projects\Experiments\Pulse\Pulse.App\obj\Release\net8.0-windows\win-x64\ref\Pulse.App.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\red_pulse.ico
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\Microsoft.Data.Sqlite.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.batteries_v2.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\e_sqlite3.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\obj\Release\net8.0-windows\win-x64\Pulse.App.sourcelink.json
