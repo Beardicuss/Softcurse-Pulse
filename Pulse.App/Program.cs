@@ -33,7 +33,8 @@ namespace Pulse.App
                 actionEngine
             };
 
-            var pluginsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+            var appData = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
+            var pluginsDir = System.IO.Path.Combine(appData, "Plugins");
             var pluginModules = PluginLoader.LoadPlugins(pluginsDir, actionEngine, configManager);
             modules.AddRange(pluginModules);
 
