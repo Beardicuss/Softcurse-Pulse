@@ -111,9 +111,10 @@ namespace Pulse.App
             _graphBox.Paint += GraphBox_Paint;
             pnlGraph.Controls.Add(_graphBox);
 
-            _pnlLogsView.Controls.Add(_lstLogs);
-            _pnlLogsView.Controls.Add(lblTitle);
-            _pnlLogsView.Controls.Add(pnlGraph); // bottom layer
+            _pnlLogsView.Controls.Add(lblTitle);     // Top evaluates first
+            _pnlLogsView.Controls.Add(pnlGraph);     // Bottom evaluates second
+            _pnlLogsView.Controls.Add(_lstLogs);     // Fill evaluates last space
+            _lstLogs.SendToBack(); // Physically force listbox safely into remaining coordinates
 
             // --- View 2: Settings ---
             _pnlSettingsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), ForeColor = Color.FromArgb(232, 244, 248), Padding = new Padding(10), Visible = false };
@@ -196,11 +197,14 @@ namespace Pulse.App
             tabSelectorPanel.Controls.Add(btnTabHistory);
             tabSelectorPanel.Controls.Add(btnTabSettings);
 
-            this.Controls.Add(_contentPanel);
-            this.Controls.Add(tabSelectorPanel);
             this.Controls.Add(titleBar);
-            titleBar.BringToFront();
-            tabSelectorPanel.BringToFront();
+            this.Controls.Add(tabSelectorPanel);
+            this.Controls.Add(_contentPanel);
+            
+            tabSelectorPanel.BringToFront(); // Push tabs to top evaluation level
+            titleBar.BringToFront();         // Push header above tabs ensuring exact waterfall layout
+            _contentPanel.SendToBack();      // Drop content exclusively underneath all preceding blocks
+            
             ApplyCyberpunkTheme(this);
             // Overrides for pure flat fake tabs so ApplyTheme doesnt make them look like thick buttons
             btnTabLogs.FlatAppearance.BorderSize = 0;
