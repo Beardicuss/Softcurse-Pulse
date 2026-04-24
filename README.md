@@ -1,7 +1,7 @@
 # Pulse System Monitor
 
 <div align="center">
-  <img src="Pulse.App/pulse_logo.png" alt="Pulse Logo" height="200" />
+  <img src="Pulse.App/pulse_logo.png" alt="Pulse Logo" width="600" />
 </div>
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Version](https://img.shields.io/badge/version-3.0.0-blue)
