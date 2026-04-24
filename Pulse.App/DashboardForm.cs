@@ -9,6 +9,14 @@ namespace Pulse.App
 {
     public class DashboardForm : Form
     {
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
         private ActionEngine _actionEngine;
         private ConfigManager _configManager;
         
@@ -45,12 +53,35 @@ namespace Pulse.App
         private void InitializeComponent()
         {
             this.Text = "Softcurse Pulse Dashboard";
-            this.Size = new Size(550, 500);
+            this.Size = new Size(560, 520);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Icon = SystemIcons.Application;
             this.BackColor = Color.FromArgb(2, 2, 2);
+            this.FormBorderStyle = FormBorderStyle.None;
+            // Draw a fake 1px cyan border
+            this.Paint += (s, e) => { e.Graphics.DrawRectangle(new Pen(Color.FromArgb(0, 255, 255), 2), 0, 0, this.Width - 1, this.Height - 1); };
 
-            _tabControl = new TabControl { Dock = DockStyle.Fill };
+            var titleBar = new Panel { Dock = DockStyle.Top, Height = 35, BackColor = Color.FromArgb(5, 8, 16) };
+            titleBar.MouseDown += TitleBar_MouseDown;
+
+            var btnClose = new Button { Tag = "ignore", Text = "X", Dock = DockStyle.Right, FlatStyle = FlatStyle.Flat, Width = 35, ForeColor = Color.FromArgb(255, 107, 53), Cursor = Cursors.Hand, Font = new Font("Consolas", 10F, FontStyle.Bold) };
+            btnClose.FlatAppearance.BorderSize = 0;
+            btnClose.Click += (s, e) => this.Close();
+
+            var btnMin = new Button { Tag = "ignore", Text = "_", Dock = DockStyle.Right, FlatStyle = FlatStyle.Flat, Width = 35, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 10F, FontStyle.Bold) };
+            btnMin.FlatAppearance.BorderSize = 0;
+            btnMin.Click += (s, e) => this.WindowState = FormWindowState.Minimized;
+
+            var lblAppTitle = new Label { Text = "  " + this.Text, ForeColor = Color.FromArgb(0, 255, 255), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, Font = new Font("Bebas Neue", 11F, FontStyle.Regular) };
+            lblAppTitle.MouseDown += TitleBar_MouseDown;
+
+            titleBar.Controls.Add(lblAppTitle);
+            titleBar.Controls.Add(btnMin);
+            titleBar.Controls.Add(btnClose);
+
+            _tabControl = new TabControl { Dock = DockStyle.Fill, DrawMode = TabDrawMode.OwnerDrawFixed, ItemSize = new Size(130, 25), Font = new Font("Space Mono", 9F) };
+            _tabControl.Padding = new Point(15, 3);
+            _tabControl.DrawItem += TabControl_DrawItem;
             
             // --- Tab 1: Logs & Graphs ---
             var tabLogs = new TabPage("Activity & Graphs") { BackColor = Color.FromArgb(2, 2, 2) };
@@ -68,8 +99,9 @@ namespace Pulse.App
                 Text = "◆ SOFTCURSE/SYS ALERTS", 
                 Dock = DockStyle.Top, 
                 Font = new Font("Bebas Neue", 12F, FontStyle.Regular),
-                Padding = new Padding(5),
-                ForeColor = Color.FromArgb(0, 255, 255) // Cyan
+                Padding = new Padding(5, 5, 5, 15),
+                ForeColor = Color.FromArgb(0, 255, 255), // Cyan
+                AutoSize = true
             };
 
             // Setup Graph Panel at the bottom
@@ -152,10 +184,39 @@ namespace Pulse.App
             _tabControl.TabPages.Add(tabSettings);
 
             this.Controls.Add(_tabControl);
+            this.Controls.Add(titleBar);
+            titleBar.BringToFront();
             ApplyCyberpunkTheme(this);
 
             _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Softcurse Pulse Dashboard Online");
             _lstLogs.MouseDown += LstLogs_MouseDown;
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var g = e.Graphics;
+            var tabArea = _tabControl.GetTabRect(e.Index);
+            var tabPage = _tabControl.TabPages[e.Index];
+
+            bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+            
+            using var backBrush = new SolidBrush(isSelected ? Color.FromArgb(5, 8, 16) : Color.FromArgb(2, 2, 2));
+            g.FillRectangle(backBrush, tabArea);
+
+            var textColor = isSelected ? Color.FromArgb(0, 255, 255) : Color.FromArgb(100, 100, 100);
+            using var textBrush = new SolidBrush(textColor);
+            
+            var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            g.DrawString(tabPage.Text, _tabControl.Font, textBrush, tabArea, format);
         }
 
         private void LstLogs_MouseDown(object sender, MouseEventArgs e)
@@ -222,7 +283,7 @@ namespace Pulse.App
                     c.ForeColor = Color.FromArgb(0, 255, 204);
                     if (c is TextBox txt) txt.BorderStyle = BorderStyle.FixedSingle;
                 }
-                else if (c is Button btn)
+                else if (c is Button btn && btn.Tag?.ToString() != "ignore")
                 {
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255);
@@ -255,7 +316,8 @@ namespace Pulse.App
         {
             try
             {
-                var pluginsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+                var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
+                var pluginsDir = System.IO.Path.Combine(appData, "Plugins");
                 if (!System.IO.Directory.Exists(pluginsDir)) System.IO.Directory.CreateDirectory(pluginsDir);
                 System.Diagnostics.Process.Start("explorer.exe", pluginsDir);
                 MessageBox.Show("Drop your .dll plugin files into this folder, then restart Pulse to load them automatically!", "Plugins", MessageBoxButtons.OK, MessageBoxIcon.Information);
