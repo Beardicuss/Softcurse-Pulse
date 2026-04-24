@@ -14,9 +14,9 @@ OutputBaseFilename=SoftcursePulse_Setup_v3
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
-SetupIconFile=Pulse.App\red_pulse.ico
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
+SetupIconFile=Publish\red_pulse.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -26,8 +26,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "Publish\Pulse.App.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Pulse.App\red_pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "Publish\red_pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; IconFilename: "{app}\red_pulse.ico"
