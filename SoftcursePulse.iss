@@ -16,7 +16,7 @@ SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
-SetupIconFile=Publish\red_pulse.ico
+SetupIconFile=Publish\pulse.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -26,11 +26,11 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "Publish\Pulse.App.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Publish\red_pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Publish\pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{autoprograms}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; IconFilename: "{app}\red_pulse.ico"
-Name: "{autodesktop}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; Tasks: desktopicon; IconFilename: "{app}\red_pulse.ico"
+Name: "{autoprograms}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; IconFilename: "{app}\pulse.ico"
+Name: "{autodesktop}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; Tasks: desktopicon; IconFilename: "{app}\pulse.ico"
 
 [Run]
 Filename: "{app}\Pulse.App.exe"; Description: "{cm:LaunchProgram,Softcurse Pulse}"; Flags: nowait postinstall skipifsilent
