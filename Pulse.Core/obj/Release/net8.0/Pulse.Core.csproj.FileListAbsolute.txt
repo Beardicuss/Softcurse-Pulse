@@ -1,0 +1,11 @@
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\bin\Release\net8.0\Pulse.Core.deps.json
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\bin\Release\net8.0\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\bin\Release\net8.0\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.AssemblyInfoInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.AssemblyInfo.cs
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\refint\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Core\obj\Release\net8.0\ref\Pulse.Core.dll

@@ -1,0 +1,15 @@
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\bin\Debug\net8.0\Pulse.Plugins.MemoryMonitor.deps.json
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\bin\Debug\net8.0\Pulse.Plugins.MemoryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\bin\Debug\net8.0\Pulse.Plugins.MemoryMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\bin\Debug\net8.0\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\bin\Debug\net8.0\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.csproj.AssemblyReference.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.AssemblyInfoInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.AssemblyInfo.cs
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Pl.54784C8A.Up2Date
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\refint\Pulse.Plugins.MemoryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\Pulse.Plugins.MemoryMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.MemoryMonitor\obj\Debug\net8.0\ref\Pulse.Plugins.MemoryMonitor.dll

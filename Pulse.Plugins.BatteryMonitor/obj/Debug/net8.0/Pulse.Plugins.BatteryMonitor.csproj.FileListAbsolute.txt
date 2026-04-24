@@ -1,0 +1,15 @@
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\bin\Debug\net8.0\Pulse.Plugins.BatteryMonitor.deps.json
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\bin\Debug\net8.0\Pulse.Plugins.BatteryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\bin\Debug\net8.0\Pulse.Plugins.BatteryMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\bin\Debug\net8.0\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\bin\Debug\net8.0\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.csproj.AssemblyReference.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.AssemblyInfoInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.AssemblyInfo.cs
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Pl.3F4682BD.Up2Date
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\refint\Pulse.Plugins.BatteryMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\Pulse.Plugins.BatteryMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.BatteryMonitor\obj\Debug\net8.0\ref\Pulse.Plugins.BatteryMonitor.dll

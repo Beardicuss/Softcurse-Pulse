@@ -1,0 +1,4 @@
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\publish\Pulse.App.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\publish\pulse.ico
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\publish\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.App\bin\Release\net8.0-windows\win-x64\publish\Pulse.App.exe

@@ -1,0 +1,15 @@
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\bin\Debug\net8.0\Pulse.Plugins.DiskMonitor.deps.json
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\bin\Debug\net8.0\Pulse.Plugins.DiskMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\bin\Debug\net8.0\Pulse.Plugins.DiskMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\bin\Debug\net8.0\Pulse.Core.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\bin\Debug\net8.0\Pulse.Core.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.csproj.AssemblyReference.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.AssemblyInfoInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.AssemblyInfo.cs
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Pl.E79835E8.Up2Date
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\refint\Pulse.Plugins.DiskMonitor.dll
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\Pulse.Plugins.DiskMonitor.pdb
+D:\Dev\Projects\Experiments\Pulse\Pulse.Plugins.DiskMonitor\obj\Debug\net8.0\ref\Pulse.Plugins.DiskMonitor.dll

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.App", "Pulse.App\Pulse.App.csproj", "{CFD3F94C-F5D6-4D83-8813-A72ADBE16ED5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.Core", "Pulse.Core\Pulse.Core.csproj", "{00D1D84A-6E2D-46E0-93E6-1ED530396E87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFD3F94C-F5D6-4D83-8813-A72ADBE16ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD3F94C-F5D6-4D83-8813-A72ADBE16ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD3F94C-F5D6-4D83-8813-A72ADBE16ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD3F94C-F5D6-4D83-8813-A72ADBE16ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
