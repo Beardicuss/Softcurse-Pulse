@@ -59,10 +59,9 @@ namespace Pulse.App
             this.Size = new Size(560, 520);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Icon = SystemIcons.Application;
-            this.BackColor = Color.FromArgb(2, 2, 2);
+            this.BackColor = Color.FromArgb(0, 255, 255); // The pure neon border color
+            this.Padding = new Padding(1); // Force a 1px border natively
             this.FormBorderStyle = FormBorderStyle.None;
-            // Draw a fake 1px cyan border
-            this.Paint += (s, e) => { e.Graphics.DrawRectangle(new Pen(Color.FromArgb(0, 255, 255), 2), 0, 0, this.Width - 1, this.Height - 1); };
 
             var titleBar = new Panel { Dock = DockStyle.Top, Height = 35, BackColor = Color.FromArgb(5, 8, 16) };
             titleBar.MouseDown += TitleBar_MouseDown;
@@ -127,32 +126,32 @@ namespace Pulse.App
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
 
-            table.Controls.Add(new Label { Text = "Network Polling (ms):", Anchor = AnchorStyles.Left }, 0, 0);
-            _numNetPoll = new NumericUpDown { Minimum = 500, Maximum = 60000, Increment = 500, Width = 150 };
+            table.Controls.Add(new Label { Text = "Network Polling (ms):", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 0);
+            _numNetPoll = new NumericUpDown { Minimum = 500, Maximum = 60000, Increment = 500, Width = 200, Margin = new Padding(5) };
             table.Controls.Add(_numNetPoll, 1, 0);
 
-            table.Controls.Add(new Label { Text = "Process Polling (ms):", Anchor = AnchorStyles.Left }, 0, 1);
-            _numProcPoll = new NumericUpDown { Minimum = 1000, Maximum = 120000, Increment = 1000, Width = 150 };
+            table.Controls.Add(new Label { Text = "Process Polling (ms):", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 1);
+            _numProcPoll = new NumericUpDown { Minimum = 1000, Maximum = 120000, Increment = 1000, Width = 200, Margin = new Padding(5) };
             table.Controls.Add(_numProcPoll, 1, 1);
 
-            table.Controls.Add(new Label { Text = "CPU Threshold (%):", Anchor = AnchorStyles.Left }, 0, 2);
-            _numCpuThresh = new NumericUpDown { Minimum = 1, Maximum = 100, Width = 150 };
+            table.Controls.Add(new Label { Text = "CPU Threshold (%):", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 2);
+            _numCpuThresh = new NumericUpDown { Minimum = 1, Maximum = 100, Width = 200, Margin = new Padding(5) };
             table.Controls.Add(_numCpuThresh, 1, 2);
 
-            table.Controls.Add(new Label { Text = "Suspicious Processes (csv):", Anchor = AnchorStyles.Left }, 0, 3);
-            _txtSuspicious = new TextBox { Width = 250 };
+            table.Controls.Add(new Label { Text = "Suspicious Processes (csv):", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 3);
+            _txtSuspicious = new TextBox { Width = 300, Margin = new Padding(5) };
             table.Controls.Add(_txtSuspicious, 1, 3);
 
-            table.Controls.Add(new Label { Text = "Discord Webhook URL:", Anchor = AnchorStyles.Left }, 0, 4);
-            _txtDiscordUrl = new TextBox { Width = 250 };
+            table.Controls.Add(new Label { Text = "Discord Webhook URL:", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 4);
+            _txtDiscordUrl = new TextBox { Width = 300, Margin = new Padding(5) };
             table.Controls.Add(_txtDiscordUrl, 1, 4);
 
-            table.Controls.Add(new Label { Text = "Telegram Bot Token:", Anchor = AnchorStyles.Left }, 0, 5);
-            _txtTelegramToken = new TextBox { Width = 250 };
+            table.Controls.Add(new Label { Text = "Telegram Bot Token:", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 5);
+            _txtTelegramToken = new TextBox { Width = 300, Margin = new Padding(5) };
             table.Controls.Add(_txtTelegramToken, 1, 5);
 
-            table.Controls.Add(new Label { Text = "Telegram Chat ID:", Anchor = AnchorStyles.Left }, 0, 6);
-            _txtTelegramChatId = new TextBox { Width = 250 };
+            table.Controls.Add(new Label { Text = "Telegram Chat ID:", Anchor = AnchorStyles.Left, AutoSize = true }, 0, 6);
+            _txtTelegramChatId = new TextBox { Width = 300, Margin = new Padding(5) };
             table.Controls.Add(_txtTelegramChatId, 1, 6);
 
             var btnSave = new Button { Text = "Save Settings", Margin = new Padding(0, 10, 0, 0), Height = 30 };
@@ -208,8 +207,8 @@ namespace Pulse.App
             btnTabHistory.FlatAppearance.BorderSize = 0;
             btnTabSettings.FlatAppearance.BorderSize = 0;
 
-            // Optional: thin inner container margin to separate resize edges
-            _contentPanel.Padding = new Padding(2);
+            // Thin inner margin already established via form Padding
+            _contentPanel.Padding = new Padding(0);
             
             _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Softcurse Pulse Dashboard Online");
             _lstLogs.MouseDown += LstLogs_MouseDown;
