@@ -44,35 +44,36 @@ namespace Pulse.App
 
         private void InitializeComponent()
         {
-            this.Text = "Pulse Dashboard";
+            this.Text = "Softcurse Pulse Dashboard";
             this.Size = new Size(550, 500);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Icon = SystemIcons.Application;
+            this.BackColor = Color.FromArgb(2, 2, 2);
 
             _tabControl = new TabControl { Dock = DockStyle.Fill };
             
             // --- Tab 1: Logs & Graphs ---
-            var tabLogs = new TabPage("Activity & Graphs") { BackColor = Color.FromArgb(30, 30, 30) };
+            var tabLogs = new TabPage("Activity & Graphs") { BackColor = Color.FromArgb(2, 2, 2) };
             _lstLogs = new ListBox
             {
                 Dock = DockStyle.Fill,
                 IntegralHeight = false,
-                BackColor = Color.FromArgb(20, 20, 20),
-                ForeColor = Color.LightGreen,
-                Font = new Font("Consolas", 10F),
+                BackColor = Color.FromArgb(5, 8, 16),
+                ForeColor = Color.FromArgb(0, 255, 204), // Cyan Live
+                Font = new Font("Space Mono", 10F, FontStyle.Regular),
                 BorderStyle = BorderStyle.None
             };
             var lblTitle = new Label 
             { 
-                Text = "Recent Alerts & Activity", 
+                Text = "◆ SOFTCURSE/SYS ALERTS", 
                 Dock = DockStyle.Top, 
-                Font = new Font(this.Font, FontStyle.Bold),
+                Font = new Font("Bebas Neue", 12F, FontStyle.Regular),
                 Padding = new Padding(5),
-                ForeColor = Color.White
+                ForeColor = Color.FromArgb(0, 255, 255) // Cyan
             };
 
             // Setup Graph Panel at the bottom
-            var pnlGraph = new Panel { Dock = DockStyle.Bottom, Height = 120, BackColor = Color.Black, Padding = new Padding(2) };
+            var pnlGraph = new Panel { Dock = DockStyle.Bottom, Height = 120, BackColor = Color.FromArgb(2, 2, 2), Padding = new Padding(2) };
             _graphBox = new PictureBox { Dock = DockStyle.Fill };
             _graphBox.Paint += GraphBox_Paint;
             pnlGraph.Controls.Add(_graphBox);
@@ -82,11 +83,12 @@ namespace Pulse.App
             tabLogs.Controls.Add(pnlGraph); // bottom layer
 
             // --- Tab 2: Settings ---
-            var tabSettings = new TabPage("Settings") { Padding = new Padding(10) };
+            var tabSettings = new TabPage("Settings") { Padding = new Padding(10), BackColor = Color.FromArgb(2, 2, 2), ForeColor = Color.FromArgb(232, 244, 248) };
             
             var table = new TableLayoutPanel 
             { 
-                Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2, RowCount = 9 
+                Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2, RowCount = 9,
+                Font = new Font("DM Sans", 9F)
             };
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
@@ -129,14 +131,14 @@ namespace Pulse.App
 
             tabSettings.Controls.Add(table);
 
-            var tabHistory = new TabPage("Warning History") { BackColor = Color.FromArgb(30, 30, 30) };
+            var tabHistory = new TabPage("Warning History") { BackColor = Color.FromArgb(2, 2, 2) };
             var lstHistory = new ListBox
             {
                 Dock = DockStyle.Fill,
                 IntegralHeight = false,
-                BackColor = Color.FromArgb(20, 20, 20),
-                ForeColor = Color.Orange,
-                Font = new Font("Consolas", 9F),
+                BackColor = Color.FromArgb(5, 8, 16),
+                ForeColor = Color.FromArgb(255, 107, 53),
+                Font = new Font("Space Mono", 9F),
                 BorderStyle = BorderStyle.None
             };
             foreach (var log in DatabaseManager.GetRecentAnomalies(100))
@@ -150,8 +152,9 @@ namespace Pulse.App
             _tabControl.TabPages.Add(tabSettings);
 
             this.Controls.Add(_tabControl);
+            ApplyCyberpunkTheme(this);
 
-            _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Dashboard Opened");
+            _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Softcurse Pulse Dashboard Online");
             _lstLogs.MouseDown += LstLogs_MouseDown;
         }
 
@@ -184,7 +187,7 @@ namespace Pulse.App
         private void GraphBox_Paint(object sender, PaintEventArgs e)
         {
             var g = e.Graphics;
-            g.Clear(Color.Black);
+            g.Clear(Color.FromArgb(2, 2, 2));
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             if (_latencyHistory.Count < 2) return;
@@ -203,9 +206,36 @@ namespace Pulse.App
                 points[i] = new PointF(x, y);
             }
 
-            using var pen = new Pen(Color.LimeGreen, 2f);
+            using var pen = new Pen(Color.FromArgb(255, 107, 53), 2f);
             g.DrawLines(pen, points);
-            g.DrawString($"Live Latency (Max {maxRaw}ms)", new Font("Arial", 8), Brushes.White, 5, 5);
+            using var brush = new SolidBrush(Color.FromArgb(0, 255, 255));
+            g.DrawString($"LIVE LATENCY (MAX {maxRaw}MS)", new Font("Space Mono", 8), brush, 5, 5);
+        }
+
+        private void ApplyCyberpunkTheme(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                if (c is TextBox || c is NumericUpDown)
+                {
+                    c.BackColor = Color.FromArgb(5, 8, 16);
+                    c.ForeColor = Color.FromArgb(0, 255, 204);
+                    if (c is TextBox txt) txt.BorderStyle = BorderStyle.FixedSingle;
+                }
+                else if (c is Button btn)
+                {
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255);
+                    btn.FlatAppearance.BorderSize = 1;
+                    btn.BackColor = Color.FromArgb(2, 2, 2);
+                    btn.ForeColor = Color.FromArgb(0, 255, 255);
+                }
+                
+                if (c.HasChildren)
+                {
+                    ApplyCyberpunkTheme(c);
+                }
+            }
         }
 
         private void LoadSettingsIntoUI()
