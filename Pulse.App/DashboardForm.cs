@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Pulse.Core;
@@ -59,69 +60,176 @@ namespace Pulse.App
             this.Size = new Size(560, 520);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Icon = SystemIcons.Application;
-            this.BackColor = Color.FromArgb(0, 255, 255); // The pure neon border color
-            this.Padding = new Padding(1); // Force a 1px border natively
+            this.BackColor = Color.FromArgb(0, 255, 255); // 1px neon border via Padding
+            this.Padding = new Padding(1);
             this.FormBorderStyle = FormBorderStyle.None;
 
-            var titleBar = new Panel { Dock = DockStyle.Top, Height = 35, BackColor = Color.FromArgb(5, 8, 16) };
+            // ── Title Bar ────────────────────────────────────────────────────────
+            var titleBar = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 35,
+                BackColor = Color.FromArgb(5, 8, 16)
+            };
             titleBar.MouseDown += TitleBar_MouseDown;
 
-            var btnClose = new Button { Tag = "ignore", Text = "X", Dock = DockStyle.Right, FlatStyle = FlatStyle.Flat, Width = 35, ForeColor = Color.FromArgb(255, 107, 53), Cursor = Cursors.Hand, Font = new Font("Consolas", 10F, FontStyle.Bold) };
+            var btnClose = new Button
+            {
+                Tag = "ignore",
+                Text = "X",
+                Dock = DockStyle.Right,
+                FlatStyle = FlatStyle.Flat,
+                Width = 35,
+                ForeColor = Color.FromArgb(255, 107, 53),
+                Cursor = Cursors.Hand,
+                Font = new Font("Consolas", 10F, FontStyle.Bold)
+            };
             btnClose.FlatAppearance.BorderSize = 0;
             btnClose.Click += (s, e) => this.Close();
 
-            var btnMin = new Button { Tag = "ignore", Text = "_", Dock = DockStyle.Right, FlatStyle = FlatStyle.Flat, Width = 35, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 10F, FontStyle.Bold) };
+            var btnMin = new Button
+            {
+                Tag = "ignore",
+                Text = "_",
+                Dock = DockStyle.Right,
+                FlatStyle = FlatStyle.Flat,
+                Width = 35,
+                ForeColor = Color.FromArgb(0, 255, 255),
+                Cursor = Cursors.Hand,
+                Font = new Font("Consolas", 10F, FontStyle.Bold)
+            };
             btnMin.FlatAppearance.BorderSize = 0;
             btnMin.Click += (s, e) => this.WindowState = FormWindowState.Minimized;
 
-            var lblAppTitle = new Label { Text = "  " + this.Text, ForeColor = Color.FromArgb(0, 255, 255), Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft, Font = new Font("Bebas Neue", 11F, FontStyle.Regular) };
+            var lblAppTitle = new Label
+            {
+                Text = "  " + this.Text,
+                ForeColor = Color.FromArgb(0, 255, 255),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Bebas Neue", 11F, FontStyle.Regular)
+            };
             lblAppTitle.MouseDown += TitleBar_MouseDown;
 
             titleBar.Controls.Add(lblAppTitle);
             titleBar.Controls.Add(btnMin);
             titleBar.Controls.Add(btnClose);
 
-            var tabSelectorPanel = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 35, BackColor = Color.FromArgb(2, 2, 2) };
-            _contentPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2) };
-            
-            // --- View 1: Logs & Graphs ---
-            _pnlLogsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = true };
-            _lstLogs = new ListBox
+            // ── Tab Selector ─────────────────────────────────────────────────────
+            var tabSelectorPanel = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
-                IntegralHeight = false,
-                BackColor = Color.FromArgb(5, 8, 16),
-                ForeColor = Color.FromArgb(0, 255, 204), // Cyan Live
-                Font = new Font("Space Mono", 10F, FontStyle.Regular),
-                BorderStyle = BorderStyle.None
-            };
-            var lblTitle = new Label 
-            { 
-                Text = "◆ SOFTCURSE/SYS ALERTS", 
-                Dock = DockStyle.Top, 
-                Font = new Font("Bebas Neue", 12F, FontStyle.Regular),
-                Padding = new Padding(5, 5, 5, 15),
-                ForeColor = Color.FromArgb(0, 255, 255), // Cyan
-                AutoSize = true
+                Dock = DockStyle.Top,
+                Height = 35,
+                BackColor = Color.FromArgb(2, 2, 2)
             };
 
-            // Setup Graph Panel at the bottom
+            var btnTabLogs = new Button { Text = "ACTIVITY && GRAPHS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+            var btnTabHistory = new Button { Text = "WARNING HISTORY", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(255, 107, 53), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+            var btnTabSettings = new Button { Text = "SYSTEM SETTINGS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+
+            btnTabLogs.FlatAppearance.BorderSize = 0;
+            btnTabHistory.FlatAppearance.BorderSize = 0;
+            btnTabSettings.FlatAppearance.BorderSize = 0;
+
+            btnTabLogs.Click    += (s, e) => { _pnlLogsView.Visible = true;  _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = false; };
+            btnTabHistory.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = true;  _pnlSettingsView.Visible = false; };
+            btnTabSettings.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = true;  };
+
+            tabSelectorPanel.Controls.Add(btnTabLogs);
+            tabSelectorPanel.Controls.Add(btnTabHistory);
+            tabSelectorPanel.Controls.Add(btnTabSettings);
+
+            // ── Content Panel (shared Fill container for all views) ───────────────
+            _contentPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2) };
+
+            // ── View 1: Logs & Graph ──────────────────────────────────────────────
+            _pnlLogsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = true };
+
+            // FIX: AutoSize = true conflicts with Dock = Top — use a fixed height instead.
+            var lblLogsTitle = new Label
+            {
+                Text = "◆ SOFTCURSE/SYS ALERTS",
+                Dock = DockStyle.Top,
+                Height = 38,
+                AutoSize = false,
+                Font = new Font("Bebas Neue", 12F, FontStyle.Regular),
+                Padding = new Padding(5, 5, 5, 5),
+                ForeColor = Color.FromArgb(0, 255, 255),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
             var pnlGraph = new Panel { Dock = DockStyle.Bottom, Height = 120, BackColor = Color.FromArgb(2, 2, 2), Padding = new Padding(2) };
             _graphBox = new PictureBox { Dock = DockStyle.Fill };
             _graphBox.Paint += GraphBox_Paint;
             pnlGraph.Controls.Add(_graphBox);
 
-            _pnlLogsView.Controls.Add(lblTitle);     // Top evaluates first
-            _pnlLogsView.Controls.Add(pnlGraph);     // Bottom evaluates second
-            _pnlLogsView.Controls.Add(_lstLogs);     // Fill evaluates last space
-            _lstLogs.SendToBack(); // Physically force listbox safely into remaining coordinates
+            _lstLogs = new ListBox
+            {
+                Dock = DockStyle.Fill,
+                IntegralHeight = false,
+                BackColor = Color.FromArgb(5, 8, 16),
+                ForeColor = Color.FromArgb(0, 255, 204),
+                Font = new Font("Space Mono", 10F, FontStyle.Regular),
+                BorderStyle = BorderStyle.None
+            };
 
-            // --- View 2: Settings ---
-            _pnlSettingsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), ForeColor = Color.FromArgb(232, 244, 248), Padding = new Padding(10), Visible = false };
-            
-            var table = new TableLayoutPanel 
-            { 
-                Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2, RowCount = 9,
+            // Correct add order for DockStyle layout:
+            //   1. Top-docked controls first  → claim space from the top
+            //   2. Bottom-docked controls next → claim space from the bottom
+            //   3. Fill control last           → takes whatever remains
+            // DO NOT call SendToBack/BringToFront — the natural add order is the correct order.
+            _pnlLogsView.Controls.Add(lblLogsTitle); // Top  → index 0
+            _pnlLogsView.Controls.Add(pnlGraph);     // Bottom → index 1
+            _pnlLogsView.Controls.Add(_lstLogs);     // Fill → index 2 (processed last, fills middle)
+
+            // ── View 2: Warning History ───────────────────────────────────────────
+            _pnlHistoryView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = false };
+
+            var lblHistoryTitle = new Label
+            {
+                Text = "◆ WARNING HISTORY",
+                Dock = DockStyle.Top,
+                Height = 38,
+                AutoSize = false,
+                Font = new Font("Bebas Neue", 12F, FontStyle.Regular),
+                Padding = new Padding(5, 5, 5, 5),
+                ForeColor = Color.FromArgb(255, 107, 53),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var lstHistory = new ListBox
+            {
+                Dock = DockStyle.Fill,
+                IntegralHeight = false,
+                BackColor = Color.FromArgb(5, 8, 16),
+                ForeColor = Color.FromArgb(255, 107, 53),
+                Font = new Font("Space Mono", 9F),
+                BorderStyle = BorderStyle.None
+            };
+            foreach (var log in DatabaseManager.GetRecentAnomalies(100))
+                lstHistory.Items.Add(log);
+
+            _pnlHistoryView.Controls.Add(lblHistoryTitle); // Top → index 0
+            _pnlHistoryView.Controls.Add(lstHistory);      // Fill → index 1
+
+            // ── View 3: Settings ─────────────────────────────────────────────────
+            // AutoScroll = true so the settings table never gets clipped if the window is small.
+            _pnlSettingsView = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(2, 2, 2),
+                ForeColor = Color.FromArgb(232, 244, 248),
+                Padding = new Padding(10),
+                AutoScroll = true,
+                Visible = false
+            };
+
+            var table = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                ColumnCount = 2,
+                RowCount = 9,
                 Font = new Font("DM Sans", 9F)
             };
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
@@ -165,55 +273,26 @@ namespace Pulse.App
 
             _pnlSettingsView.Controls.Add(table);
 
-            _pnlHistoryView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = false };
-            var lstHistory = new ListBox
-            {
-                Dock = DockStyle.Fill,
-                IntegralHeight = false,
-                BackColor = Color.FromArgb(5, 8, 16),
-                ForeColor = Color.FromArgb(255, 107, 53),
-                Font = new Font("Space Mono", 9F),
-                BorderStyle = BorderStyle.None
-            };
-            foreach (var log in DatabaseManager.GetRecentAnomalies(100))
-            {
-                lstHistory.Items.Add(log);
-            }
-            _pnlHistoryView.Controls.Add(lstHistory);
-
+            // ── Assemble content panel ────────────────────────────────────────────
+            // All three views share the same Fill space; only one is Visible at a time.
             _contentPanel.Controls.Add(_pnlLogsView);
             _contentPanel.Controls.Add(_pnlHistoryView);
             _contentPanel.Controls.Add(_pnlSettingsView);
 
-            var btnTabLogs = new Button { Text = "ACTIVITY && GRAPHS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
-            var btnTabHistory = new Button { Text = "WARNING HISTORY", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(255, 107, 53), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
-            var btnTabSettings = new Button { Text = "SYSTEM SETTINGS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+            // ── Assemble form ─────────────────────────────────────────────────────
+            // Rule: add Dock=Top controls first (they claim space first in layout order),
+            // then add the Dock=Fill control last (it takes whatever space remains).
+            // Never use BringToFront/SendToBack to compensate for wrong add order.
+            this.Controls.Add(titleBar);         // Top → processed 1st, y = 0
+            this.Controls.Add(tabSelectorPanel); // Top → processed 2nd, y = 35
+            this.Controls.Add(_contentPanel);    // Fill → processed last, y = 70
 
-            btnTabLogs.Click += (s, e) => { _pnlLogsView.Visible = true; _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = false; };
-            btnTabHistory.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = true; _pnlSettingsView.Visible = false; };
-            btnTabSettings.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = true; };
-
-            tabSelectorPanel.Controls.Add(btnTabLogs);
-            tabSelectorPanel.Controls.Add(btnTabHistory);
-            tabSelectorPanel.Controls.Add(btnTabSettings);
-
-            this.Controls.Add(titleBar);
-            this.Controls.Add(tabSelectorPanel);
-            this.Controls.Add(_contentPanel);
-            
-            tabSelectorPanel.BringToFront(); // Push tabs to top evaluation level
-            titleBar.BringToFront();         // Push header above tabs ensuring exact waterfall layout
-            _contentPanel.SendToBack();      // Drop content exclusively underneath all preceding blocks
-            
             ApplyCyberpunkTheme(this);
-            // Overrides for pure flat fake tabs so ApplyTheme doesnt make them look like thick buttons
+            // Restore flat look for fake-tab buttons after ApplyCyberpunkTheme runs
             btnTabLogs.FlatAppearance.BorderSize = 0;
             btnTabHistory.FlatAppearance.BorderSize = 0;
             btnTabSettings.FlatAppearance.BorderSize = 0;
 
-            // Thin inner margin already established via form Padding
-            _contentPanel.Padding = new Padding(0);
-            
             _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Softcurse Pulse Dashboard Online");
             _lstLogs.MouseDown += LstLogs_MouseDown;
         }
@@ -238,14 +317,14 @@ namespace Pulse.App
                 {
                     Point p = this.PointToClient(Cursor.Position);
                     int b = 10;
-                    if (p.X <= b && p.Y <= b) m.Result = (IntPtr)13;
-                    else if (p.X <= b && p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)16;
-                    else if (p.X <= b) m.Result = (IntPtr)10;
-                    else if (p.X >= this.ClientSize.Width - b && p.Y <= b) m.Result = (IntPtr)14;
+                    if      (p.X <= b && p.Y <= b)                                          m.Result = (IntPtr)13;
+                    else if (p.X <= b && p.Y >= this.ClientSize.Height - b)                 m.Result = (IntPtr)16;
+                    else if (p.X <= b)                                                       m.Result = (IntPtr)10;
+                    else if (p.X >= this.ClientSize.Width - b && p.Y <= b)                  m.Result = (IntPtr)14;
                     else if (p.X >= this.ClientSize.Width - b && p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)17;
-                    else if (p.X >= this.ClientSize.Width - b) m.Result = (IntPtr)11;
-                    else if (p.Y <= b) m.Result = (IntPtr)12;
-                    else if (p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)15;
+                    else if (p.X >= this.ClientSize.Width - b)                              m.Result = (IntPtr)11;
+                    else if (p.Y <= b)                                                       m.Result = (IntPtr)12;
+                    else if (p.Y >= this.ClientSize.Height - b)                             m.Result = (IntPtr)15;
                 }
             }
         }
@@ -286,9 +365,9 @@ namespace Pulse.App
 
             var w = _graphBox.Width;
             var h = _graphBox.Height;
-            float stepX = (float)w / 100f; // Track last 100 ticks
+            float stepX = (float)w / 100f;
             long maxRaw = _latencyHistory.Max();
-            float maxLatency = (float)Math.Max(150.0, maxRaw * 1.2); 
+            float maxLatency = (float)Math.Max(150.0, maxRaw * 1.2);
             
             var points = new PointF[_latencyHistory.Count];
             for (int i = 0; i < _latencyHistory.Count; i++)
@@ -324,9 +403,7 @@ namespace Pulse.App
                 }
                 
                 if (c.HasChildren)
-                {
                     ApplyCyberpunkTheme(c);
-                }
             }
         }
 
@@ -334,11 +411,11 @@ namespace Pulse.App
         {
             if (_configManager?.CurrentConfig == null) return;
             var c = _configManager.CurrentConfig;
-            _numNetPoll.Value = Math.Max(_numNetPoll.Minimum, Math.Min(_numNetPoll.Maximum, c.NetworkPollingIntervalMs));
-            _numProcPoll.Value = Math.Max(_numProcPoll.Minimum, Math.Min(_numProcPoll.Maximum, c.ProcessPollingIntervalMs));
+            _numNetPoll.Value   = Math.Max(_numNetPoll.Minimum,   Math.Min(_numNetPoll.Maximum,   c.NetworkPollingIntervalMs));
+            _numProcPoll.Value  = Math.Max(_numProcPoll.Minimum,  Math.Min(_numProcPoll.Maximum,  c.ProcessPollingIntervalMs));
             _numCpuThresh.Value = (decimal)Math.Max((double)_numCpuThresh.Minimum, Math.Min((double)_numCpuThresh.Maximum, c.CpuThresholdPercent));
-            _txtSuspicious.Text = string.Join(", ", c.SuspiciousProcesses);
-            _txtDiscordUrl.Text = c.DiscordWebhookUrl;
+            _txtSuspicious.Text    = string.Join(", ", c.SuspiciousProcesses);
+            _txtDiscordUrl.Text    = c.DiscordWebhookUrl;
             _txtTelegramToken.Text = c.TelegramBotToken;
             _txtTelegramChatId.Text = c.TelegramChatId;
         }
@@ -347,9 +424,9 @@ namespace Pulse.App
         {
             try
             {
-                var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
-                var pluginsDir = System.IO.Path.Combine(appData, "Plugins");
-                if (!System.IO.Directory.Exists(pluginsDir)) System.IO.Directory.CreateDirectory(pluginsDir);
+                var appData    = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
+                var pluginsDir = Path.Combine(appData, "Plugins");
+                if (!Directory.Exists(pluginsDir)) Directory.CreateDirectory(pluginsDir);
                 System.Diagnostics.Process.Start("explorer.exe", pluginsDir);
                 MessageBox.Show("Drop your .dll plugin files into this folder, then restart Pulse to load them automatically!", "Plugins", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -363,21 +440,22 @@ namespace Pulse.App
         {
             if (_configManager == null) return;
             var c = _configManager.CurrentConfig;
-            c.NetworkPollingIntervalMs = (int)_numNetPoll.Value;
-            c.ProcessPollingIntervalMs = (int)_numProcPoll.Value;
-            c.CpuThresholdPercent = (double)_numCpuThresh.Value;
-            c.SuspiciousProcesses = _txtSuspicious.Text.Split(',')
+            c.NetworkPollingIntervalMs  = (int)_numNetPoll.Value;
+            c.ProcessPollingIntervalMs  = (int)_numProcPoll.Value;
+            c.CpuThresholdPercent       = (double)_numCpuThresh.Value;
+            c.SuspiciousProcesses = _txtSuspicious.Text
+                .Split(',')
                 .Select(s => s.Trim().ToLowerInvariant())
                 .Where(s => !string.IsNullOrEmpty(s))
                 .ToList();
-            c.DiscordWebhookUrl = _txtDiscordUrl.Text.Trim();
-            c.TelegramBotToken = _txtTelegramToken.Text.Trim();
-            c.TelegramChatId = _txtTelegramChatId.Text.Trim();
+            c.DiscordWebhookUrl  = _txtDiscordUrl.Text.Trim();
+            c.TelegramBotToken   = _txtTelegramToken.Text.Trim();
+            c.TelegramChatId     = _txtTelegramChatId.Text.Trim();
 
             _configManager.SaveConfig();
             
             _lstLogs.Items.Insert(0, $"[{DateTime.Now:HH:mm:ss}] [System] Config Updated! Network loop timing may require next cycle to catch new value.");
-            _pnlLogsView.Visible = true;
+            _pnlLogsView.Visible    = true;
             _pnlHistoryView.Visible = false;
             _pnlSettingsView.Visible = false;
         }
@@ -393,7 +471,7 @@ namespace Pulse.App
                 }
                 _latencyHistory.Add(value);
                 if (_latencyHistory.Count > 100) _latencyHistory.RemoveAt(0);
-                _graphBox.Invalidate(); // trigger repaint
+                _graphBox.Invalidate();
             }
         }
 
@@ -407,9 +485,7 @@ namespace Pulse.App
 
             _lstLogs.Items.Insert(0, $"[{DateTime.Now:HH:mm:ss}] [{title}] {message}");
             if (_lstLogs.Items.Count > 100)
-            {
                 _lstLogs.Items.RemoveAt(_lstLogs.Items.Count - 1);
-            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -417,7 +493,7 @@ namespace Pulse.App
             if (_actionEngine != null)
             {
                 _actionEngine.OnAlertRequested -= ActionEngine_OnAlertRequested;
-                _actionEngine.OnMetricRecorded -= ActionEngine_OnMetricRecorded;
+                _actionEngine.OnMetricRecorded  -= ActionEngine_OnMetricRecorded;
             }
             base.OnFormClosing(e);
         }
