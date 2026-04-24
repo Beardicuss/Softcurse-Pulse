@@ -1,38 +1,78 @@
-# Pulse
+# Pulse System Monitor
 
-Pulse is a lightweight desktop background application designed for network monitoring and process tracking with minimal system impact.
+<div align="center">
+  <img src="Pulse.App/pulse_logo.png" alt="Pulse Logo" height="200" />
+</div>
 
-## Features
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Version](https://img.shields.io/badge/version-3.0.0-blue)
 
-- **Network Monitoring**: Periodic ping checks to track latency and connection stability.
-- **Process Monitoring**: Detects high-resource processes and logs potential issues.
-- **Smart Action Engine**: A trigger-based system for automated responses (e.g., notifications).
-- **System Tray UI**: Minimal interface for status checks and module control.
-- **Lightweight Logging**: Efficient event logging to `pulse.log`.
+> A professional-grade Windows telemetry and offensive diagnostics engine.
 
-## Architecture
+## Overview
+Pulse transforms standard system monitoring into an active enforcement engine. Instead of just watching your CPU and RAM spike, Pulse aggressively quarantines malicious processes via dynamic Windows Firewall routing, predicts memory leaks before they crash your OS, and instantly pipes alerts anywhere in the world via Discord and Telegram. 
 
-- **Pulse.Core**: Contains the core logic, interfaces, and monitoring modules.
-- **Pulse.App**: The Windows Forms application that hosts the system tray icon and manages the lifecycle of the modules.
+## ✨ Features
+- **Auto-Quarantine Isolation**: Instantly injects `netsh advfirewall` rules to cleanly block inbound and outbound network traffic of hijacked processes without forcefully killing them.
+- **Dynamic Anomaly Detection**: Uses standard deviation and moving averages instead of static thresholds to natively learn what "normal" looks like on your machine.
+- **Remote Webhooks Architecture**: Completely integrated Discord & Telegram API payloads for off-site diagnostics.
+- **Deep Plugin Ecosystem**: Built-in C# reflection loader seamlessly integrates isolated `.dll` extensions like internal battery drop tracking and monotonic memory leak hunting.
+- **SQLite Analytics Dashboard**: Local event database rendering an internal Graphical interface log of every historical system infraction.
 
-## Requirements
+## 📦 Installation
 
-- .NET 8.0 SDK
-- Windows OS (for System Tray and WinForms support)
+To deploy Pulse on any Windows environment:
 
-## How to Run
-
-1. Open a terminal in the project root.
-2. Run the application:
+1. **Clone the repository:**
    ```bash
-   dotnet run --project Pulse.App
+   git clone https://github.com/Dant3B/Pulse.git
+   cd Pulse
    ```
-3. Look for the Pulse icon in your system tray.
+2. **Build the framework:**
+   ```bash
+   dotnet build -c Release
+   ```
+3. **Execute the client:**
+   ```bash
+   dotnet run --project Pulse.App --configuration Release
+   ```
 
-## MVP Scope
+*(Requires .NET 8.0 SDK)*
 
-- [x] Network monitoring (ping + latency)
-- [x] Basic alerts
-- [x] Simple process monitoring
-- [x] Tray UI
-- [x] Logging
+## 🚀 Quick Start
+Pulse natively minimizes to the Windows System Tray on launch. 
+Double-click the green sphere icon `pulse.ico` to open the central Dashboard. Right-click the icon for quick actions. 
+If an anomaly is detected, the icon will dynamically switch to `red_pulse.ico` and a balloon notification will be dispatched alongside any configured webhooks.
+
+## 🔧 Configuration
+Configuration is securely retained in `appsettings.json` within your output binary folder and natively configurable within the **Dashboard -> Settings** UI.
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| `NetworkPollingIntervalMs` | Interval for ICMP ping tests | `5000` |
+| `ProcessPollingIntervalMs` | Interval for CPU/Memory heuristics | `10000` |
+| `CpuThresholdPercent` | Tolerance limit before flagging CPU | `80.0` |
+| `SuspiciousProcesses` | Blacklist for strict monitoring | `notepad, miner, malware` |
+| `DiscordWebhookUrl` | Off-site Discord channel endpoint | ` ` |
+| `TelegramBotToken` | Off-site Telegram API Bot Auth | ` ` |
+| `TelegramChatId` | Target User ID for Telegram routing | ` ` |
+
+## 💡 Advanced Usage: Plugins
+To add your own heuristics (like checking GPU temps or external servers):
+1. Create a `.NET 8 Class Library`.
+2. Reference `Pulse.Core` and implement the `IModule` interface.
+3. Drop the compiled `.dll` into the `Plugins/` directory next to the executable. Pulse will automatically discover and run it on reboot.
+
+## 🏗️ Architecture
+Pulse operates on a completely decoupled Event-Driven architecture:
+- `Pulse.Core`: The central nervous system containing the `ActionEngine` and universal SQLite trackers.
+- `Pulse.App`: The WinForms GUI handling contextual rendering and user settings mapping.
+- `Pulse.Plugins`: Extracted C# interfaces loaded entirely during runtime to prevent core memory pollution.
+
+## 🤝 Contributing
+Contributions are extremely welcome! We are seeking developers to build out the `Pulse.Plugins` ecosystem. Please review our [Contributing Guidelines](.github/CONTRIBUTING.md) to get started!
+
+## 📄 License
+Released under the [MIT License](LICENSE).
+
+## 💬 Support
+For issues or feature requests, please log a ticket on the GitHub Issues board. For critical zero-day vulnerabilities, review the [Security Policy](.github/SECURITY.md).
