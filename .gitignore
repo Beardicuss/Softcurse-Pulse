@@ -33,3 +33,5 @@ appsettings.json
 # Distribution
 Publish/
 Installer/
+Pulse.App/bin/
+Pulse.App/obj/
