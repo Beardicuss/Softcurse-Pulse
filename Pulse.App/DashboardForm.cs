@@ -20,7 +20,10 @@ namespace Pulse.App
         private ActionEngine _actionEngine;
         private ConfigManager _configManager;
         
-        private TabControl _tabControl;
+        private Panel _contentPanel;
+        private Panel _pnlLogsView;
+        private Panel _pnlHistoryView;
+        private Panel _pnlSettingsView;
         private ListBox _lstLogs;
         
         // Settings UI
@@ -79,11 +82,11 @@ namespace Pulse.App
             titleBar.Controls.Add(btnMin);
             titleBar.Controls.Add(btnClose);
 
-            _tabControl = new TabControl { Dock = DockStyle.Fill, DrawMode = TabDrawMode.OwnerDrawFixed, Appearance = TabAppearance.FlatButtons, ItemSize = new Size(140, 25), SizeMode = TabSizeMode.Fixed, Font = new Font("Consolas", 10F) };
-            _tabControl.DrawItem += TabControl_DrawItem;
+            var tabSelectorPanel = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 35, BackColor = Color.FromArgb(2, 2, 2) };
+            _contentPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2) };
             
-            // --- Tab 1: Logs & Graphs ---
-            var tabLogs = new TabPage("Activity & Graphs") { BackColor = Color.FromArgb(2, 2, 2) };
+            // --- View 1: Logs & Graphs ---
+            _pnlLogsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = true };
             _lstLogs = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -109,12 +112,12 @@ namespace Pulse.App
             _graphBox.Paint += GraphBox_Paint;
             pnlGraph.Controls.Add(_graphBox);
 
-            tabLogs.Controls.Add(_lstLogs);
-            tabLogs.Controls.Add(lblTitle);
-            tabLogs.Controls.Add(pnlGraph); // bottom layer
+            _pnlLogsView.Controls.Add(_lstLogs);
+            _pnlLogsView.Controls.Add(lblTitle);
+            _pnlLogsView.Controls.Add(pnlGraph); // bottom layer
 
-            // --- Tab 2: Settings ---
-            var tabSettings = new TabPage("Settings") { Padding = new Padding(10), BackColor = Color.FromArgb(2, 2, 2), ForeColor = Color.FromArgb(232, 244, 248) };
+            // --- View 2: Settings ---
+            _pnlSettingsView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), ForeColor = Color.FromArgb(232, 244, 248), Padding = new Padding(10), Visible = false };
             
             var table = new TableLayoutPanel 
             { 
@@ -160,9 +163,9 @@ namespace Pulse.App
             btnOpenPlugins.Click += (s, e) => OpenPluginsFolder();
             table.Controls.Add(btnOpenPlugins, 0, 8);
 
-            tabSettings.Controls.Add(table);
+            _pnlSettingsView.Controls.Add(table);
 
-            var tabHistory = new TabPage("Warning History") { BackColor = Color.FromArgb(2, 2, 2) };
+            _pnlHistoryView = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(2, 2, 2), Visible = false };
             var lstHistory = new ListBox
             {
                 Dock = DockStyle.Fill,
@@ -176,17 +179,38 @@ namespace Pulse.App
             {
                 lstHistory.Items.Add(log);
             }
-            tabHistory.Controls.Add(lstHistory);
+            _pnlHistoryView.Controls.Add(lstHistory);
 
-            _tabControl.TabPages.Add(tabLogs);
-            _tabControl.TabPages.Add(tabHistory);
-            _tabControl.TabPages.Add(tabSettings);
+            _contentPanel.Controls.Add(_pnlLogsView);
+            _contentPanel.Controls.Add(_pnlHistoryView);
+            _contentPanel.Controls.Add(_pnlSettingsView);
 
-            this.Controls.Add(_tabControl);
+            var btnTabLogs = new Button { Text = "ACTIVITY && GRAPHS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+            var btnTabHistory = new Button { Text = "WARNING HISTORY", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(255, 107, 53), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+            var btnTabSettings = new Button { Text = "SYSTEM SETTINGS", Width = 150, Height = 30, FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0, 255, 255), Cursor = Cursors.Hand, Font = new Font("Consolas", 9F) };
+
+            btnTabLogs.Click += (s, e) => { _pnlLogsView.Visible = true; _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = false; };
+            btnTabHistory.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = true; _pnlSettingsView.Visible = false; };
+            btnTabSettings.Click += (s, e) => { _pnlLogsView.Visible = false; _pnlHistoryView.Visible = false; _pnlSettingsView.Visible = true; };
+
+            tabSelectorPanel.Controls.Add(btnTabLogs);
+            tabSelectorPanel.Controls.Add(btnTabHistory);
+            tabSelectorPanel.Controls.Add(btnTabSettings);
+
+            this.Controls.Add(_contentPanel);
+            this.Controls.Add(tabSelectorPanel);
             this.Controls.Add(titleBar);
             titleBar.BringToFront();
+            tabSelectorPanel.BringToFront();
             ApplyCyberpunkTheme(this);
+            // Overrides for pure flat fake tabs so ApplyTheme doesnt make them look like thick buttons
+            btnTabLogs.FlatAppearance.BorderSize = 0;
+            btnTabHistory.FlatAppearance.BorderSize = 0;
+            btnTabSettings.FlatAppearance.BorderSize = 0;
 
+            // Optional: thin inner container margin to separate resize edges
+            _contentPanel.Padding = new Padding(2);
+            
             _lstLogs.Items.Add($"[{DateTime.Now:HH:mm:ss}] Softcurse Pulse Dashboard Online");
             _lstLogs.MouseDown += LstLogs_MouseDown;
         }
@@ -198,30 +222,6 @@ namespace Pulse.App
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
-        }
-
-        private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            var g = e.Graphics;
-            var tabArea = _tabControl.GetTabRect(e.Index);
-            var tabPage = _tabControl.TabPages[e.Index];
-
-            bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-            
-            using var backBrush = new SolidBrush(isSelected ? Color.FromArgb(5, 8, 16) : Color.FromArgb(2, 2, 2));
-            g.FillRectangle(backBrush, tabArea);
-
-            if (isSelected) 
-            {
-                using var borderPen = new Pen(Color.FromArgb(0, 255, 255), 1);
-                g.DrawRectangle(borderPen, tabArea.X, tabArea.Y, tabArea.Width - 1, tabArea.Height - 1);
-            }
-
-            var textColor = isSelected ? Color.FromArgb(0, 255, 255) : Color.FromArgb(100, 100, 100);
-            using var textBrush = new SolidBrush(textColor);
-            
-            var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-            g.DrawString(tabPage.Text, _tabControl.Font, textBrush, tabArea, format);
         }
 
         protected override void WndProc(ref Message m)
@@ -374,7 +374,9 @@ namespace Pulse.App
             _configManager.SaveConfig();
             
             _lstLogs.Items.Insert(0, $"[{DateTime.Now:HH:mm:ss}] [System] Config Updated! Network loop timing may require next cycle to catch new value.");
-            _tabControl.SelectedIndex = 0;
+            _pnlLogsView.Visible = true;
+            _pnlHistoryView.Visible = false;
+            _pnlSettingsView.Visible = false;
         }
 
         private void ActionEngine_OnMetricRecorded(string name, long value)
