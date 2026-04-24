@@ -79,8 +79,7 @@ namespace Pulse.App
             titleBar.Controls.Add(btnMin);
             titleBar.Controls.Add(btnClose);
 
-            _tabControl = new TabControl { Dock = DockStyle.Fill, DrawMode = TabDrawMode.OwnerDrawFixed, ItemSize = new Size(130, 25), Font = new Font("Space Mono", 9F) };
-            _tabControl.Padding = new Point(15, 3);
+            _tabControl = new TabControl { Dock = DockStyle.Fill, DrawMode = TabDrawMode.OwnerDrawFixed, Appearance = TabAppearance.FlatButtons, ItemSize = new Size(140, 25), SizeMode = TabSizeMode.Fixed, Font = new Font("Consolas", 10F) };
             _tabControl.DrawItem += TabControl_DrawItem;
             
             // --- Tab 1: Logs & Graphs ---
@@ -212,11 +211,40 @@ namespace Pulse.App
             using var backBrush = new SolidBrush(isSelected ? Color.FromArgb(5, 8, 16) : Color.FromArgb(2, 2, 2));
             g.FillRectangle(backBrush, tabArea);
 
+            if (isSelected) 
+            {
+                using var borderPen = new Pen(Color.FromArgb(0, 255, 255), 1);
+                g.DrawRectangle(borderPen, tabArea.X, tabArea.Y, tabArea.Width - 1, tabArea.Height - 1);
+            }
+
             var textColor = isSelected ? Color.FromArgb(0, 255, 255) : Color.FromArgb(100, 100, 100);
             using var textBrush = new SolidBrush(textColor);
             
             var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
             g.DrawString(tabPage.Text, _tabControl.Font, textBrush, tabArea, format);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_NCHITTEST = 0x0084;
+            base.WndProc(ref m);
+            if (m.Msg == WM_NCHITTEST)
+            {
+                int val = m.Result.ToInt32();
+                if (val == 1) // HTCLIENT
+                {
+                    Point p = this.PointToClient(Cursor.Position);
+                    int b = 10;
+                    if (p.X <= b && p.Y <= b) m.Result = (IntPtr)13;
+                    else if (p.X <= b && p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)16;
+                    else if (p.X <= b) m.Result = (IntPtr)10;
+                    else if (p.X >= this.ClientSize.Width - b && p.Y <= b) m.Result = (IntPtr)14;
+                    else if (p.X >= this.ClientSize.Width - b && p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)17;
+                    else if (p.X >= this.ClientSize.Width - b) m.Result = (IntPtr)11;
+                    else if (p.Y <= b) m.Result = (IntPtr)12;
+                    else if (p.Y >= this.ClientSize.Height - b) m.Result = (IntPtr)15;
+                }
+            }
         }
 
         private void LstLogs_MouseDown(object sender, MouseEventArgs e)
