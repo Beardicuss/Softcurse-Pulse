@@ -18,7 +18,8 @@ namespace Pulse.Core
 
     public class ConfigManager
     {
-        private static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
+        private static readonly string AppDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
+        private static readonly string ConfigPath = Path.Combine(AppDataDir, "appsettings.json");
         public PulseConfig CurrentConfig { get; private set; }
         
         public event Action OnConfigUpdated;
@@ -54,6 +55,7 @@ namespace Pulse.Core
         {
             try
             {
+                if (!Directory.Exists(AppDataDir)) Directory.CreateDirectory(AppDataDir);
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 var json = JsonSerializer.Serialize(CurrentConfig, options);
                 File.WriteAllText(ConfigPath, json);

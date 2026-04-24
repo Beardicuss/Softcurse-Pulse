@@ -6,11 +6,13 @@ namespace Pulse.Core
 {
     public static class DatabaseManager
     {
-        private static readonly string DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pulse.db");
+        private static readonly string AppDataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftcursePulse");
+        private static readonly string DbPath = Path.Combine(AppDataDir, "pulse.db");
         private static readonly object _lockObj = new object();
         
         public static void Initialize()
         {
+            if (!Directory.Exists(AppDataDir)) Directory.CreateDirectory(AppDataDir);
             lock (_lockObj)
             {
                 using var connection = new SqliteConnection($"Data Source={DbPath}");
