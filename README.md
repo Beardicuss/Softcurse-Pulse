@@ -6,7 +6,8 @@
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Version](https://img.shields.io/badge/version-3.0.0-blue)
 
-> A professional-grade Windows telemetry and offensive diagnostics engine.
+> **A professional-grade Windows telemetry and offensive diagnostics engine.**
+> 🌐 **[Visit the Official Softcurse Systems Website](https://softcurse-website.pages.dev/)**
 
 ## Overview
 Pulse transforms standard system monitoring into an active enforcement engine. Instead of just watching your CPU and RAM spike, Pulse aggressively quarantines malicious processes via dynamic Windows Firewall routing, predicts memory leaks before they crash your OS, and instantly pipes alerts anywhere in the world via Discord and Telegram. 
