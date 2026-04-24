@@ -82,7 +82,7 @@ namespace Pulse.Core
 
                 NotifyUser("System Action", $"Successfully quarantined '{processName}'. All inbound and outbound traffic has been permanently blocked by Windows Firewall.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 NotifyUser("Action Failed", $"Could not quarantine {processName}: You must grant UAC Admin permissions for Firewall injection.");
             }

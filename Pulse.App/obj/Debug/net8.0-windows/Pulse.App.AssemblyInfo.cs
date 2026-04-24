@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pulse.App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67e3a838e705a5bd24ffbeafb198ead61f43260f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pulse.App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pulse.App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
