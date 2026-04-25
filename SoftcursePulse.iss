@@ -35,3 +35,9 @@ Name: "{autodesktop}\Softcurse Pulse"; Filename: "{app}\Pulse.App.exe"; Tasks: d
 
 [Run]
 Filename: "{app}\Pulse.App.exe"; Description: "{cm:LaunchProgram,Softcurse Pulse}"; Flags: nowait postinstall skipifsilent
+
+[InstallDelete]
+Type: files; Name: "{userstartup}\Pulse.lnk"
+
+[UninstallDelete]
+Type: files; Name: "{userstartup}\Pulse.lnk"
