@@ -28,6 +28,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "Publish\Pulse.App.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Publish\pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Publish\red_pulse.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Publish\e_sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Publish\Plugins\*"; DestDir: "{localappdata}\SoftcursePulse\Plugins"; Flags: ignoreversion recursesubdirs createallsubdirs
 
