@@ -1,16 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "ghUFGQHvYpw=",
+  "dgSpecHash": "AAMEYq9rTew=",
   "success": true,
   "projectFilePath": "D:\\Dev\\Projects\\Experiments\\Pulse\\Pulse.Plugins.MemoryMonitor\\Pulse.Plugins.MemoryMonitor.csproj",
   "expectedPackageFiles": [
     "D:\\DevCache\\nuget\\microsoft.data.sqlite\\10.0.7\\microsoft.data.sqlite.10.0.7.nupkg.sha512",
     "D:\\DevCache\\nuget\\microsoft.data.sqlite.core\\10.0.7\\microsoft.data.sqlite.core.10.0.7.nupkg.sha512",
+    "D:\\DevCache\\nuget\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "D:\\DevCache\\nuget\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "D:\\DevCache\\nuget\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
     "D:\\DevCache\\nuget\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
     "D:\\DevCache\\nuget\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
     "D:\\DevCache\\nuget\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
-    "D:\\DevCache\\nuget\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+    "D:\\DevCache\\nuget\\system.diagnostics.eventlog\\10.0.7\\system.diagnostics.eventlog.10.0.7.nupkg.sha512",
+    "D:\\DevCache\\nuget\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "D:\\DevCache\\nuget\\system.security.accesscontrol\\5.0.0\\system.security.accesscontrol.5.0.0.nupkg.sha512",
+    "D:\\DevCache\\nuget\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

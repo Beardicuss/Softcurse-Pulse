@@ -78,14 +78,34 @@ namespace Pulse.Core
                     {
                         // ── 1. Blacklist check ────────────────────────────────────
                         // FIX #8: Only alert once per process instance (by PID).
-                        if (!_alertedSuspiciousPids.Contains(p.Id) &&
-                            suspiciousList.Contains(p.ProcessName.ToLowerInvariant()))
+                        if (!_alertedSuspiciousPids.Contains(p.Id))
                         {
-                            _alertedSuspiciousPids.Add(p.Id);
-                            string pName = p.ProcessName; // capture for closure
-                            _actionEngine.ExecuteAction("Suspicious Process", () =>
-                                _actionEngine.NotifyUser("Security Alert",
-                                    $"Suspicious process detected: {pName} (PID {p.Id})"));
+                            // A) Explicit Blacklist Name Match
+                            if (suspiciousList.Contains(p.ProcessName.ToLowerInvariant()))
+                            {
+                                _alertedSuspiciousPids.Add(p.Id);
+                                string pName = p.ProcessName;
+                                _actionEngine.ExecuteAction("Suspicious Process", () =>
+                                    _actionEngine.NotifyUser("Security Alert",
+                                        $"Suspicious process mapped to Explicit Blacklist: {pName} (PID {p.Id})"));
+                            }
+                            else
+                            {
+                                // B) Dynamic Behavioral Heuristic (Execution from Temp/Hidden paths)
+                                try
+                                {
+                                    var path = p.MainModule?.FileName;
+                                    if (path != null && (path.Contains(@"\AppData\Local\Temp\") || path.Contains(@"\Windows\Temp\")))
+                                    {
+                                        _alertedSuspiciousPids.Add(p.Id);
+                                        string pName = p.ProcessName;
+                                        _actionEngine.ExecuteAction("Heuristic Suspicious", () =>
+                                            _actionEngine.NotifyUser("Advanced Security Alert",
+                                                $"WARNING: Unapproved dynamic executable detected spooling from Temp Path: {pName}.exe (PID {p.Id})"));
+                                    }
+                                }
+                                catch { /* System processes block MainModule access natively */ }
+                            }
                         }
 
                         // ── 2. CPU tracking ──────────────────────────────────────

@@ -46,6 +46,14 @@
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[10.0.7, )"
+            },
+            "Microsoft.Win32.Registry": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "System.Diagnostics.EventLog": {
+              "target": "Package",
+              "version": "[10.0.7, )"
             }
           },
           "imports": [

@@ -17,7 +17,7 @@ namespace Pulse.Core
                 return modules;
             }
 
-            var dllFiles = Directory.GetFiles(pluginsDirectory, "*.dll");
+            var dllFiles = Directory.GetFiles(pluginsDirectory, "Pulse.Plugins*.dll");
             foreach (var file in dllFiles)
             {
                 try
