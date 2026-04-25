@@ -52,8 +52,9 @@ namespace Pulse.App
         private TextBox       _txtTelegramToken;
         private TextBox       _txtTelegramChatId;
 
-        private PictureBox _graphBox;
-        private List<long> _latencyHistory = new List<long>();
+        private PictureBox         _graphBox;
+        private List<long>         _latencyHistory = new List<long>();
+        private TableLayoutPanel   _settingsTable;   // field so OnLoad can set initial width
 
         private System.Windows.Forms.Timer _blinkTimer;
         private Label  _lblStatus;
@@ -243,36 +244,22 @@ namespace Pulse.App
             _pnlHistoryView.Controls.Add(_lstHistory);  // Fill (last)
 
             // ── View 3: Settings ─────────────────────────────────────────────────
+            // Approach: _pnlSettingsView itself is the AutoScroll container.
+            // _settingsTable is a field (not a local) so OnLoad can set its initial
+            // width — the Resize handler alone isn't enough because it doesn't fire
+            // during InitializeComponent when the panel hasn't been measured yet.
             _pnlSettingsView = new Panel
             {
                 Dock       = DockStyle.Fill,
                 BackColor  = BG,
-                Padding    = new Padding(0),
-                AutoScroll = false,
+                AutoScroll = true,
+                Padding    = new Padding(12, 8, 12, 12),
                 Visible    = false
             };
 
-            var lblSettingsTitle = MakeSectionLabel("⚙  SYSTEM CONFIGURATION", CYAN);
-
-            // FIX: Dock=Top on a TableLayoutPanel inside an AutoScroll panel prevents
-            // scrolling — the control is always anchored to y=0 of the client area so
-            // the scroll position never moves it. Network Polling and Process Polling
-            // were permanently hidden above the visible area with no way to reach them.
-            //
-            // Solution: Dock=None + AutoSize=true so AutoScroll can compute the full
-            // scroll extent from the table's actual bounds. A Resize handler keeps the
-            // table stretched to the panel's full client width.
-            var settingsScroll = new Panel
+            _settingsTable = new TableLayoutPanel
             {
-                Dock       = DockStyle.Fill,
-                BackColor  = BG,
-                AutoScroll = true,
-                Padding    = new Padding(14, 10, 14, 14)
-            };
-
-            var table = new TableLayoutPanel
-            {
-                Dock            = DockStyle.None,   // ← was DockStyle.Top (broke AutoScroll)
+                Dock            = DockStyle.None,
                 AutoSize        = true,
                 AutoSizeMode    = AutoSizeMode.GrowAndShrink,
                 ColumnCount     = 2,
@@ -280,58 +267,69 @@ namespace Pulse.App
                 BackColor       = BG,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.None
             };
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 215));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            _settingsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210));
+            _settingsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-            // Keep the table full-width as the window is resized.
-            settingsScroll.Resize += (s, e) =>
+            // Row 0: section header spanning both columns
+            _settingsTable.RowCount = 1;
+            _settingsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+            var hdrLabel = new Label
             {
-                var p = settingsScroll;
-                table.Width = Math.Max(0, p.ClientSize.Width - p.Padding.Horizontal);
+                Text = "⚙  SYSTEM CONFIGURATION", Dock = DockStyle.Fill,
+                Font = new Font("Consolas", 9F, FontStyle.Bold), ForeColor = CYAN,
+                BackColor = DIM, TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(6, 0, 0, 0), Margin = new Padding(0, 0, 0, 8)
             };
+            _settingsTable.Controls.Add(hdrLabel, 0, 0);
+            _settingsTable.SetColumnSpan(hdrLabel, 2);
 
-            // All 7 config fields (BUG 3 verified present):
-            int r = 0;
-            AddSettingsRow(table, r++, "◈  Network Polling (ms)",
+            // Data rows (all 7 config fields)
+            int r = 1;
+            AddSettingsRow(_settingsTable, r++, "◈  Network Polling (ms)",
                 _numNetPoll    = MakeNumeric(500, 60000, 500));
-            AddSettingsRow(table, r++, "◈  Process Polling (ms)",
+            AddSettingsRow(_settingsTable, r++, "◈  Process Polling (ms)",
                 _numProcPoll   = MakeNumeric(1000, 120000, 1000));
-            AddSettingsRow(table, r++, "◈  CPU Alert Threshold (%)",
+            AddSettingsRow(_settingsTable, r++, "◈  CPU Alert Threshold (%)",
                 _numCpuThresh  = MakeNumeric(1, 100, 1));
-            AddSettingsRow(table, r++, "◈  Suspicious Procs (csv)",
+            AddSettingsRow(_settingsTable, r++, "◈  Suspicious Procs (csv)",
                 _txtSuspicious = MakeTextInput());
-            AddSettingsRow(table, r++, "◈  Discord Webhook URL",
+            AddSettingsRow(_settingsTable, r++, "◈  Discord Webhook URL",
                 _txtDiscordUrl = MakeTextInput());
-            AddSettingsRow(table, r++, "◈  Telegram Bot Token",
+            AddSettingsRow(_settingsTable, r++, "◈  Telegram Bot Token",
                 _txtTelegramToken = MakeTextInput());
-            AddSettingsRow(table, r++, "◈  Telegram Chat ID",
+            AddSettingsRow(_settingsTable, r++, "◈  Telegram Chat ID",
                 _txtTelegramChatId = MakeTextInput());
 
-            // Spacer
-            table.RowCount = r + 2;
-            table.Controls.Add(new Label { Height = 14, BackColor = BG }, 0, r++);
+            // Spacer row
+            _settingsTable.RowCount = r + 2;
+            _settingsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 16));
+            _settingsTable.Controls.Add(new Label { BackColor = BG }, 0, r++);
 
-            // Action buttons
+            // Buttons row
             var pnlBtns = new FlowLayoutPanel
             {
-                AutoSize      = true,
-                BackColor     = BG,
+                AutoSize = true, BackColor = BG,
                 FlowDirection = FlowDirection.LeftToRight,
-                WrapContents  = false,
-                Margin        = new Padding(0)
+                WrapContents = false, Margin = new Padding(0)
             };
-            var btnSave    = MakeActionButton("[ SAVE CONFIG ]", CYAN);
-            var btnPlugins = MakeActionButton("[ OPEN PLUGINS ]", ORANGE);
+            var btnSave    = MakeActionButton("[ SAVE CONFIG ]",   CYAN);
+            var btnPlugins = MakeActionButton("[ OPEN PLUGINS ]",  ORANGE);
             btnSave.Click    += (s, e) => SaveSettingsFromUI();
             btnPlugins.Click += (s, e) => OpenPluginsFolder();
             pnlBtns.Controls.Add(btnSave);
             pnlBtns.Controls.Add(btnPlugins);
-            table.Controls.Add(pnlBtns, 0, r);
-            table.SetColumnSpan(pnlBtns, 2);
+            _settingsTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+            _settingsTable.Controls.Add(pnlBtns, 0, r);
+            _settingsTable.SetColumnSpan(pnlBtns, 2);
 
-            settingsScroll.Controls.Add(table);
-            _pnlSettingsView.Controls.Add(lblSettingsTitle); // Top
-            _pnlSettingsView.Controls.Add(settingsScroll);   // Fill (last)
+            // Resize handler keeps table full-width during window resizes
+            _pnlSettingsView.Resize += (s, e) =>
+            {
+                var p = _pnlSettingsView;
+                _settingsTable.Width = Math.Max(1, p.ClientSize.Width - p.Padding.Horizontal);
+            };
+
+            _pnlSettingsView.Controls.Add(_settingsTable);
 
             // ── Assemble ──────────────────────────────────────────────────────────
             _contentPanel.Controls.Add(_pnlLogsView);
