@@ -1,4 +1,5 @@
 [Setup]
+PrivilegesRequired=lowest
 AppId={{5E5D8F0B-BAF1-4F43-A33A-25FF25D899B8}
 AppName=Softcurse Pulse
 AppVersion=3.0.0
