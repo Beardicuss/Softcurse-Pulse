@@ -254,9 +254,14 @@ namespace Pulse.App
 
             var lblSettingsTitle = MakeSectionLabel("⚙  SYSTEM CONFIGURATION", CYAN);
 
-            // BUG 3 FIX: Scroll container so all rows are accessible.
-            // Previously the top rows (Network Polling, Process Polling) were clipped
-            // because the TableLayoutPanel sat flush against the top with no offset.
+            // FIX: Dock=Top on a TableLayoutPanel inside an AutoScroll panel prevents
+            // scrolling — the control is always anchored to y=0 of the client area so
+            // the scroll position never moves it. Network Polling and Process Polling
+            // were permanently hidden above the visible area with no way to reach them.
+            //
+            // Solution: Dock=None + AutoSize=true so AutoScroll can compute the full
+            // scroll extent from the table's actual bounds. A Resize handler keeps the
+            // table stretched to the panel's full client width.
             var settingsScroll = new Panel
             {
                 Dock       = DockStyle.Fill,
@@ -267,15 +272,23 @@ namespace Pulse.App
 
             var table = new TableLayoutPanel
             {
-                Dock            = DockStyle.Top,
+                Dock            = DockStyle.None,   // ← was DockStyle.Top (broke AutoScroll)
                 AutoSize        = true,
                 AutoSizeMode    = AutoSizeMode.GrowAndShrink,
                 ColumnCount     = 2,
+                Location        = new Point(0, 0),
                 BackColor       = BG,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.None
             };
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 215));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            // Keep the table full-width as the window is resized.
+            settingsScroll.Resize += (s, e) =>
+            {
+                var p = settingsScroll;
+                table.Width = Math.Max(0, p.ClientSize.Width - p.Padding.Horizontal);
+            };
 
             // All 7 config fields (BUG 3 verified present):
             int r = 0;
