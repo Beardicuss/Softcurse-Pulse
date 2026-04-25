@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.App", "Pulse.App\Puls
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.Core", "Pulse.Core\Pulse.Core.csproj", "{00D1D84A-6E2D-46E0-93E6-1ED530396E87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.Plugins.ConnectionGuard", "Pulse.Plugins.ConnectionGuard\Pulse.Plugins.ConnectionGuard.csproj", "{60EA6513-120B-4213-A61B-CD28A997CB93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulse.Plugins.RegistryWatcher", "Pulse.Plugins.RegistryWatcher\Pulse.Plugins.RegistryWatcher.csproj", "{DAEB334A-E14E-43DA-9A01-571F04EF7803}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00D1D84A-6E2D-46E0-93E6-1ED530396E87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EA6513-120B-4213-A61B-CD28A997CB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EA6513-120B-4213-A61B-CD28A997CB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EA6513-120B-4213-A61B-CD28A997CB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EA6513-120B-4213-A61B-CD28A997CB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAEB334A-E14E-43DA-9A01-571F04EF7803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAEB334A-E14E-43DA-9A01-571F04EF7803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAEB334A-E14E-43DA-9A01-571F04EF7803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAEB334A-E14E-43DA-9A01-571F04EF7803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
